@@ -158,7 +158,30 @@ generate_btn = st.button("🚀 쇼츠 콘텐츠 생성하기", type="primary", u
 # ─── 생성 로직 ────────────────────────────────────────────
 if generate_btn and topic:
     genai.configure(api_key=api_key)
-    model = genai.GenerativeModel("gemini-3.1-flash-lite")
+    # 사용 가능한 모델 자동 탐색
+    candidate_models = [
+        "gemini-3.1-flash-lite",
+        "gemini-3-flash",
+        "gemini-2.5-flash-lite",
+        "gemini-2.5-flash",
+        "gemini-2.0-flash",
+        "gemini-2.0-flash-lite",
+        "gemini-1.5-flash",
+    ]
+    model = None
+    used_model = None
+    for model_name in candidate_models:
+        try:
+            test_model = genai.GenerativeModel(model_name)
+            test_model.generate_content("test")
+            model = test_model
+            used_model = model_name
+            break
+        except Exception:
+            continue
+    if model is None:
+        st.error("사용 가능한 Gemini 모델을 찾지 못했습니다. API 키를 확인해주세요.")
+        st.stop()
 
     sec_map = {"45초": 45, "60초": 60, "75초": 75, "90초": 90}
     secs = sec_map[duration]
