@@ -158,7 +158,7 @@ generate_btn = st.button("🚀 쇼츠 콘텐츠 생성하기", type="primary", u
 # ─── 생성 로직 ────────────────────────────────────────────
 if generate_btn and topic:
     genai.configure(api_key=api_key)
-    model = genai.GenerativeModel("gemini-1.5-flash")
+    model = genai.GenerativeModel("gemini-2.0-flash")
 
     sec_map = {"45초": 45, "60초": 60, "75초": 75, "90초": 90}
     secs = sec_map[duration]
